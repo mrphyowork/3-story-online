@@ -1,12 +1,12 @@
-import { Button, Image, Layout } from "antd";
+import { Button, Card, Col, Flex, Image, Row, Typography } from "antd";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Content } from "antd/es/layout/layout";
-import Sider from "antd/es/layout/Sider";
+import { CartContext } from "../context/CartContext";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
+  const { addToCart } = useContext(CartContext);
   useEffect(() => {
     axios
       .get("https://dummyjson.com/products")
@@ -15,29 +15,12 @@ const ProductList = () => {
 
   useEffect(() => console.log(products), [products]);
 
-  const contentStyle = {
-    textAlign: "left",
-    minHeight: 120,
-    // lineHeight: "120px",
-    color: "black",
-    backgroundColor: "white",
+  const cardStyle = {
+    width: "100%",
   };
-  const siderStyle = {
-    textAlign: "center",
-    lineHeight: "120px",
-    color: "#fff",
-    backgroundColor: "white",
-  };
-
-  const layoutStyle = {
-    borderRadius: 2,
-    overflow: "hidden",
-    width: "calc(100% - 8px)",
-    maxWidth: "calc(100% - 8px)",
-    borderBottom: "1px solid black",
-    padding: "5px",
-    paddingTop: "30px",
-    backgroundColor: "white",
+  const imgStyle = {
+    display: "block",
+    width: "40%",
   };
 
   return (
@@ -54,31 +37,35 @@ const ProductList = () => {
 
         {products.map((product) => {
           return (
-            <Layout style={layoutStyle}>
-              <Layout>
-                <Content style={contentStyle}>
-                  <h3>{product.title}</h3>
-                  <p>
-                    Brand: {product.brand} | Category: {product.category}
-                  </p>
-                  <h6>Price: ${product.price}</h6>
-                  <p>
-                    Rating: {product.rating} | Stock: {product.stock}
-                  </p>
-                  <p>{product.description}</p>
-                  <Button
-                    type="primary"
-                    icon={<ShoppingCartOutlined />}
-                    className="mb-2"
-                  >
-                    Add to Cart
-                  </Button>
-                </Content>
-                <Sider width="25%" style={siderStyle}>
-                  <Image width={235} src={product.images} />
-                </Sider>
-              </Layout>
-            </Layout>
+            <Row gutter={16} key={product.id} className="mt-3">
+              <Flex justify="space-between">
+                <Col span={18}>
+                  <Card title="" variant="border">
+                    <h3>{product.title}</h3>
+                    <p>
+                      Brand: {product.brand} | Category: {product.category}{" "}
+                    </p>
+                    <h6>Price: ${product.price}</h6>
+                    <p>
+                      Rating: {product.rating} | Stock: {product.stock}
+                    </p>
+                    <p>{product.description}</p>
+                    <Button
+                      type="primary"
+                      icon={<ShoppingCartOutlined />}
+                      onClick={() => addToCart(product)}
+                    >
+                      Add to Cart
+                    </Button>
+                  </Card>
+                </Col>
+                <Col span={6} className="text-center">
+                  <Card title="" variant="border">
+                    <Image width={235} src={product.images} />
+                  </Card>
+                </Col>
+              </Flex>
+            </Row>
           );
         })}
       </div>
