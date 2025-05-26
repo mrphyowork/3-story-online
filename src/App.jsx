@@ -6,6 +6,9 @@ import { CartContext, CartProvider } from "./context/CartContext";
 import { Button } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useContext } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ThankYou from "./components/ThankYou";
+import Error from "./components/Error";
 
 const CartToggleButton = () => {
   const { toggleCart } = useContext(CartContext);
@@ -30,9 +33,16 @@ const App = () => {
   return (
     <CartProvider>
       <div>
-        <CartToggleButton />
-        <ProductList />
-        <CartDrawer />
+        <BrowserRouter>
+          <CartToggleButton />
+          <ProductList />
+          <CartDrawer />
+          <Routes>
+            <Route path="/productlist" element={<ProductList />} />
+            <Route path="/thankyou" element={<ThankYou />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+        </BrowserRouter>
       </div>
     </CartProvider>
   );

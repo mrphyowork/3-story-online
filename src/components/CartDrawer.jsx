@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Drawer, List, Button, Typography, Divider, InputNumber } from "antd";
 import { CartContext } from "../context/CartContext";
 import { ShoppingCartOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
@@ -18,6 +19,8 @@ const CartDrawer = () => {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const navigate = useNavigate();
 
   return (
     <Drawer
@@ -95,7 +98,7 @@ const CartDrawer = () => {
             padding: "12px",
             borderRadius: "6px",
           }}
-          onClick={() => alert("Proceed to Checkout")}
+          onClick={() => navigate("/thankyou")}
         >
           Checkout
         </Button>
