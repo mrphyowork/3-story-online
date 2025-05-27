@@ -19,7 +19,7 @@ const CartToggleButton = () => {
       onClick={toggleCart}
       style={{
         position: "fixed",
-        top: "50px",
+        top: "60px",
         right: "20px",
         zIndex: 1000,
         borderRadius: "50px",
