@@ -23,6 +23,7 @@ const CartToggleButton = () => {
         right: "20px",
         zIndex: 1000,
         borderRadius: "50px",
+        backgroundColor: "#1488C0",
       }}
     >
       View Cart
@@ -40,7 +41,7 @@ const App = () => {
           <Routes>
             <Route path="/productlist" element={<ProductList />} />
             <Route path="/thankyou" element={<ThankYou />} />
-            <Route path="*" element={<Error />} />
+            {/* <Route path="*" element={<Error />} /> */}
           </Routes>
         </BrowserRouter>
       </div>

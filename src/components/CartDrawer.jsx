@@ -97,6 +97,7 @@ const CartDrawer = () => {
             fontSize: "16px",
             padding: "12px",
             borderRadius: "6px",
+            backgroundColor: "#1488C0",
           }}
           onClick={() => navigate("/thankyou")}
         >
