@@ -12,11 +12,29 @@ const ProductList = () => {
 
   // For Data List from DunnyJSON
   const [products, setProducts] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 3;
+
+  // For Pagination
+  const fetchProducts = async (page) => {
+    const skip = (page - 1) * pageSize;
+    try {
+      const res = await axios.get(
+        `https://dummyjson.com/product?limit=${pageSize}&skip=${skip}`
+      );
+      setProducts(res.data.products);
+      setTotal(res.data.total);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+    }
+  };
   useEffect(() => {
-    axios
-      .get("https://dummyjson.com/products")
-      .then((res) => setProducts(res.data.products));
-  }, []);
+    fetchProducts(currentPage);
+  }, [currentPage]);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   // For Date and Time
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -119,6 +137,24 @@ const ProductList = () => {
             </Row>
           );
         })}
+
+        {/* For Pagination */}
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "30px",
+            marginBottom: "30px",
+          }}
+        >
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={total}
+            onChange={handlePageChange}
+            showSizeChanger={false}
+            align="center"
+          />
+        </div>
       </div>
     </>
   );
