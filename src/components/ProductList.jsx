@@ -1,9 +1,7 @@
-import { Button, Col, Grid, Image, Layout, Row } from "antd";
+import { Button, Col, Grid, Image, Pagination, Row } from "antd";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Content } from "antd/es/layout/layout";
-import Sider from "antd/es/layout/Sider";
 import dayjs from "dayjs";
 import { CartContext } from "../context/CartContext";
 
