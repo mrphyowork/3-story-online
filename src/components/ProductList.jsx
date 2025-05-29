@@ -1,4 +1,4 @@
-import { Button, Col, Grid, Image, Pagination, Row } from "antd";
+import { Badge, Button, Col, Grid, Image, Pagination, Row } from "antd";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import {
@@ -10,17 +10,19 @@ import dayjs from "dayjs";
 import { CartContext } from "../context/CartContext";
 
 const ProductList = () => {
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, cartItems } = useContext(CartContext);
 
   // For Data List from DunnyJSON
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 3;
+  const [isLoading, setIsLoading] = useState(false);
 
   // For Pagination
   const fetchProducts = async (page) => {
     const skip = (page - 1) * pageSize;
+    setIsLoading(true);
     try {
       const res = await axios.get(
         `https://dummyjson.com/product?limit=${pageSize}&skip=${skip}`
@@ -29,6 +31,8 @@ const ProductList = () => {
       setTotal(res.data.total);
     } catch (err) {
       console.error("Error fetching products:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -114,75 +118,97 @@ const ProductList = () => {
         </div>
 
         {/* For mainBody */}
-        {products.map((product) => {
-          return (
-            <Row
-              key={product.id}
-              gutter={[16, 16]}
-              justify="space-between"
-              align="middle"
+        {isLoading ? (
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "80px",
+              color: "lightgray",
+            }}
+          >
+            <CloudDownloadOutlined style={{ fontSize: "xx-large" }} />
+            <h5>Loading Products...</h5>
+            <Spin />
+          </div>
+        ) : (
+          <>
+            {products.map((product) => {
+              const cartItem = cartItems.find((item) => item.id === product.id);
+              const quantity = cartItem ? cartItem.quantity : 0;
+              return (
+                <Row
+                  key={product.id}
+                  gutter={[16, 16]}
+                  justify="space-between"
+                  align="middle"
+                  style={{
+                    borderBottom: "1px solid lightgray",
+                    width: "100%",
+                    paddingBottom: "20px",
+                    marginBottom: "40px",
+                  }}
+                >
+                  <Col
+                    xs={24}
+                    lg={18}
+                    style={{ textAlign: isLarge ? "center" : "left" }}
+                  >
+                    <h3>{product.title}</h3>
+                    <p>
+                      Brand: {product.brand} | Category: {product.category}
+                    </p>
+                    <h6>Price: ${product.price}</h6>
+                    <p>
+                      Rating: {product.rating} | Stock: {product.stock}
+                    </p>
+                    <p>{product.description}</p>
+
+                    {/* For Badge */}
+                    <Badge count={quantity} offset={[10, 0]}>
+                      <Button
+                        type="primary"
+                        style={{ backgroundColor: "#1488C0" }}
+                        icon={<ShoppingCartOutlined />}
+                        className="mb-2"
+                        onClick={() => addToCart(product)}
+                      >
+                        Add to Cart
+                      </Button>
+                    </Badge>
+                  </Col>
+                  <Col
+                    xs={24}
+                    lg={6}
+                    style={{
+                      order: screens.lg ? 0 : -1,
+                      textAlign: isLarge ? "center" : "right",
+                    }}
+                  >
+                    <Image width={235} src={product.images[0]} />
+                  </Col>
+                </Row>
+              );
+            })}
+
+            {/* For Pagination */}
+            <div
               style={{
-                borderBottom: "1px solid lightgray",
-                width: "100%",
-                paddingBottom: "20px",
-                marginBottom: "40px",
+                textAlign: "center",
+                marginTop: "30px",
+                marginBottom: "30px",
               }}
             >
-              <Col
-                xs={24}
-                lg={18}
-                style={{ textAlign: isLarge ? "center" : "left" }}
-              >
-                <h3>{product.title}</h3>
-                <p>
-                  Brand: {product.brand} | Category: {product.category}
-                </p>
-                <h6>Price: ${product.price}</h6>
-                <p>
-                  Rating: {product.rating} | Stock: {product.stock}
-                </p>
-                <p>{product.description}</p>
-                <Button
-                  type="primary"
-                  style={{ backgroundColor: "#1488C0" }}
-                  icon={<ShoppingCartOutlined />}
-                  className="mb-2"
-                  onClick={() => addToCart(product)}
-                >
-                  Add to Cart
-                </Button>
-              </Col>
-              <Col
-                xs={24}
-                lg={6}
-                style={{
-                  order: screens.lg ? 0 : -1,
-                  textAlign: isLarge ? "center" : "right",
-                }}
-              >
-                <Image width={235} src={product.images[0]} />
-              </Col>
-            </Row>
-          );
-        })}
-
-        {/* For Pagination */}
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "30px",
-            marginBottom: "30px",
-          }}
-        >
-          <Pagination
-            current={currentPage}
-            pageSize={pageSize}
-            total={total}
-            onChange={handlePageChange}
-            showSizeChanger={false}
-            align="center"
-          />
-        </div>
+              <Pagination
+                current={currentPage}
+                pageSize={pageSize}
+                total={total}
+                onChange={handlePageChange}
+                showSizeChanger={false}
+                align="center"
+              />
+            </div>
+          </>
+        )}
       </div>
     </>
   );
