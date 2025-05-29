@@ -1,7 +1,11 @@
 import { Button, Col, Grid, Image, Pagination, Row } from "antd";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import {
+  MoonOutlined,
+  ShoppingCartOutlined,
+  SunOutlined,
+} from "@ant-design/icons";
 import dayjs from "dayjs";
 import { CartContext } from "../context/CartContext";
 
@@ -63,12 +67,38 @@ const ProductList = () => {
     zIndex: 1100,
   };
 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  useEffect(() => {
+    document.body.style.backgroundColor = isDarkMode ? "#446F56" : "white";
+    document.body.style.color = isDarkMode ? "white" : "black";
+  }, [isDarkMode]);
+
+  const toggleStyle = {
+    position: "fixed",
+    top: "10px",
+    right: "250px",
+    padding: "3px",
+    zIndex: 1100,
+  };
+
   return (
     <>
       <div className="container rounded">
+        {/* For Theme Changer */}
+        <div style={toggleStyle}>
+          <Button
+            color="red"
+            variant="solid"
+            shape="circle"
+            onClick={() => setIsDarkMode(!isDarkMode)}
+          >
+            {isDarkMode ? <SunOutlined /> : <MoonOutlined />}
+          </Button>
+        </div>
+
         {/* For Date and Time */}
         <div style={divStyle}>
-          <p>
+          <p style={{ color: isDarkMode ? "lightgray" : "#004263" }}>
             {formatDate(currentTime)} {formatTime(currentTime)}
           </p>
         </div>

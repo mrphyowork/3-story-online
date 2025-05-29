@@ -27,7 +27,7 @@ const CartDrawer = () => {
             color: "#333",
             fontWeight: "bold",
             fontSize: "1.3rem",
-            marginTop: "5px",
+            marginTop: "60px",
           }}
         >
           <ShoppingCartOutlined style={{ marginRight: "5px" }} />
