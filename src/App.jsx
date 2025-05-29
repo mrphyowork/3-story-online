@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ThankYou from "./components/ThankYou";
 import Error from "./components/Error";
+import "./App.css";
 
 const CartToggleButton = () => {
   const { toggleCart } = useContext(CartContext);

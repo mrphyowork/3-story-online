@@ -1,7 +1,8 @@
-import { Badge, Button, Col, Grid, Image, Pagination, Row } from "antd";
+import { Badge, Button, Col, Grid, Image, Pagination, Row, Spin } from "antd";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import {
+  CloudDownloadOutlined,
   MoonOutlined,
   ShoppingCartOutlined,
   SunOutlined,
